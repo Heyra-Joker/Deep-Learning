@@ -36,7 +36,7 @@ def random_mini_batche(X, Y, mini_batche_size=64, seed=0):
         mini_batche = (mini_batche_X, mini_batche_Y)
         mini_batches.append(mini_batche)
 
-    if m % num_complete_minibatches != 0:
+    if m % mini_batche_size != 0:
         mini_batche_X = shuffle_X[num_complete_minibatches * mini_batche_size:, :]
         mini_batche_Y = shuffle_Y[num_complete_minibatches * mini_batche_size:]
         mini_batche = (mini_batche_X, mini_batche_Y)
