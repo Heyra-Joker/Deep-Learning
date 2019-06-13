@@ -1,0 +1,53 @@
+Using cuda:0, Train Samples:17500 Test Samples:7500
+[1/13] scoring Train ==> 17500 loss:0.6743762493133545 acc:0.59999996423721314
+[1/13] Train average loss: 0.6739, average accuracy: 0.5914
+[1/13] scoring Test ==> 7500 loss:0.6947818994522095 acc:0.5099999904632568
+[1/13] Test average loss: 0.6751, average accuracy: 0.5872
+[2/13] scoring Train ==> 17500 loss:0.710080623626709 acc:0.54899999797344208
+[2/13] Train average loss: 0.6756, average accuracy: 0.5710
+[2/13] scoring Test ==> 7500 loss:0.6803156137466431 acc:0.5899999737739563
+[2/13] Test average loss: 0.6738, average accuracy: 0.5735
+[3/13] scoring Train ==> 17500 loss:0.6323509812355042 acc:0.6399999856948853
+[3/13] Train average loss: 0.6372, average accuracy: 0.6475
+[3/13] scoring Test ==> 7500 loss:0.5707137584686279 acc:0.7999999523162842
+[3/13] Test average loss: 0.6441, average accuracy: 0.6339
+[4/13] scoring Train ==> 17500 loss:0.5691304206848145 acc:0.6899999976158142
+[4/13] Train average loss: 0.6104, average accuracy: 0.6667
+[4/13] scoring Test ==> 7500 loss:0.6753033399581909 acc:0.5699999928474426
+[4/13] Test average loss: 0.6249, average accuracy: 0.6523
+[5/13] scoring Train ==> 17500 loss:0.5526283383369446 acc:0.7099999785423279
+[5/13] Train average loss: 0.6073, average accuracy: 0.6691
+[5/13] scoring Test ==> 7500 loss:0.6069104671478271 acc:0.6599999666213989
+[5/13] Test average loss: 0.6248, average accuracy: 0.6492
+[6/13] scoring Train ==> 17500 loss:0.6474202871322632 acc:0.6299999952316284
+[6/13] Train average loss: 0.6228, average accuracy: 0.6488
+[6/13] scoring Test ==> 7500 loss:0.6697505116462708 acc:0.5999999642372131
+[6/13] Test average loss: 0.6344, average accuracy: 0.6321
+[7/13] scoring Train ==> 17500 loss:0.6197832226753235 acc:0.6499999761581421
+[7/13] Train average loss: 0.6184, average accuracy: 0.6591
+[7/13] scoring Test ==> 7500 loss:0.6138965487480164 acc:0.6999999880790714
+[7/13] Test average loss: 0.6345, average accuracy: 0.6337
+[8/13] scoring Train ==> 17500 loss:0.6096425652503967 acc:0.6999999880790712
+[8/13] Train average loss: 0.6080, average accuracy: 0.6745
+[8/13] scoring Test ==> 7500 loss:0.6740874648094177 acc:0.5399999618530273
+[8/13] Test average loss: 0.6240, average accuracy: 0.6491
+[9/13] scoring Train ==> 17500 loss:0.6535775661468506 acc:0.62000000476837164
+[9/13] Train average loss: 0.6391, average accuracy: 0.6219
+[9/13] scoring Test ==> 7500 loss:0.6319560408592224 acc:0.7099999785423279
+[9/13] Test average loss: 0.6678, average accuracy: 0.5988
+[10/13] scoring Train ==> 17500 loss:0.5507673025131226 acc:0.7400000095367432
+[10/13] Train average loss: 0.5585, average accuracy: 0.7224
+[10/13] scoring Test ==> 7500 loss:0.5289269685745239 acc:0.7400000095367432
+[10/13] Test average loss: 0.6048, average accuracy: 0.6755
+[11/13] scoring Train ==> 17500 loss:0.5635755062103271 acc:0.69999998807907128
+[11/13] Train average loss: 0.5619, average accuracy: 0.7050
+[11/13] scoring Test ==> 7500 loss:0.6478495001792908 acc:0.6499999761581421
+[11/13] Test average loss: 0.6068, average accuracy: 0.6708
+[12/13] scoring Train ==> 17500 loss:0.5949438810348511 acc:0.69999998807907168
+[12/13] Train average loss: 0.5553, average accuracy: 0.7017
+[12/13] scoring Test ==> 7500 loss:0.6081874370574951 acc:0.6899999976158142
+[12/13] Test average loss: 0.6149, average accuracy: 0.6520
+[13/13] scoring Train ==> 17500 loss:0.6191587448120117 acc:0.6100000143051147
+[13/13] Train average loss: 0.5884, average accuracy: 0.6797
+[13/13] scoring Test ==> 7500 loss:0.5791038870811462 acc:0.6599999666213989
+[13/13] Test average loss: 0.6509, average accuracy: 0.6313
