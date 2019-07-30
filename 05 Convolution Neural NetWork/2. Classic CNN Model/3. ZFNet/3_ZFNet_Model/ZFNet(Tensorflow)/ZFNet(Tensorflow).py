@@ -229,7 +229,7 @@ class ZFNet:
                 if acc_train >= 0.980:
                     break
             # Saver ....
-            saver.save(sess, 'model/alexNet')
+            saver.save(sess, 'model/ZFNet')
 
     def Caculate(self, sess, files, accuracy_tensor, Cost_tensor, data_placeholder,
                  labels_placeholder, rate_placeholder, model='train'):
@@ -275,6 +275,6 @@ class ZFNet:
 
 if __name__ == '__main__':
     file_dir = '/Users/huwang/Joker/Data_Set/catVSdot/train'
-    alex = ZFNet(file_dir, Load_samples=100, test_rate=0.2, n_classes=1, batch_size=20)
-    alex.fit(lr=1e-3, epochs=2, drop_rate=0.)
+    zfnet = ZFNet(file_dir, Load_samples=100, test_rate=0.2, n_classes=1, batch_size=20)
+    zfnet.fit(lr=1e-3, epochs=2, drop_rate=0.)
 
