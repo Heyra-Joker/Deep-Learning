@@ -111,3 +111,9 @@ AlexNet_pytorch.pt
 Alexnet_Keras_model.h5
 model/
 MODELS/
+ModelCVgg16/
+ModelRVgg16/
+__pycache__/
+.vscode/
+.ipynb_checkpoints/
+

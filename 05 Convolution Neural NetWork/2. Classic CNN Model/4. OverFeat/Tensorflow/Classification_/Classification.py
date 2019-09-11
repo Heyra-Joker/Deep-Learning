@@ -240,7 +240,6 @@ class OverFeat:
                         },
                     )
                 else:
-
                     acc, loss = self.sess.run(
                         [accuracy, cost],
                         feed_dict={
