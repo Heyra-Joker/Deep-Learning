@@ -4,11 +4,13 @@
 
 # YOLOV1 Code
 
-现在我们来看看如何使用TensorFlow来实现YOLOv1.
-
 ![](../photos/19.jpg)
 
+[YOLO Code README PDF](../photos/YOLOCode.pdf)
+
 ### 1.YOLO Net
+
+现在我们来看看如何使用TensorFlow来实现YOLOv1.
 
 首先我们先来看看YOLO的架构:
 
