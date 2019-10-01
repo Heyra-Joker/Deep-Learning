@@ -14,6 +14,8 @@
 
 (3) 由于GIthub不支持在线解析LaTeX,所以你可能需要按照以下方法[安装Chrome插件](https://blog.csdn.net/u014568072/article/details/88872404)或者Download到本地.
 
+(4) 如果你无法正常加载Latex可以查看[YOLOv1-PDF](photos/README.pdf)
+
 ## 1. 前言
 
 在讲解YOLO之前,我们先来回顾一下Computer Vision中几大任务:
