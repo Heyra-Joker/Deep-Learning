@@ -1,3 +1,14 @@
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
 <figure class="third">
     <img src="photos/heyra.png" width="50" heigth="50"/>
 </figure>
@@ -8,11 +19,9 @@
 
 注意事项:
 
-(1) 网上有人说这篇paper并不是YOLOv1,我看过他给予的链接实际上只有Loss部分有点小区别,我这里主要还是以这里的论文为主.
+(1) 我不会根据论文的思路讲解YOLOV1,因为论文写的太简单了,以至于在实施YOLO的时候会出现许多问题,我这里只讲解我在实施的时候遇到的一些问题.
 
-(2) 我不会根据论文的思路讲解YOLOV1,因为论文写的太简单了,以至于在实施YOLO的时候会出现许多问题,我这里只谅解我在实施的时候遇到的一些问题.
-
-(3) 如没有特殊提醒,下面论述的YOLO指的是YOLOv1.
+(2) 如没有特殊提醒,下面论述的YOLO指的是YOLOv1.
 
 ## 1. 前言
 
