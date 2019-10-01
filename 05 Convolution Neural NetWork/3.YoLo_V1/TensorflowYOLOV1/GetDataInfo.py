@@ -168,18 +168,19 @@ if __name__ == "__main__":
     # 查看原图是否能够显示
     for i in range(5):
         FileShow(data_train[i], labels_train[i])
-    # sess = tf.Session()
-    # data_load = DataLoad(sess, 64, 448)
-    # next_element = data_load.get_batchs(data_train,labels_train)
-    # while True:
-    #     try:
+        
+    sess = tf.Session()
+    data_load = DataLoad(sess, 64, 448)
+    next_element = data_load.get_batchs(data_train,labels_train)
+    while True:
+        try:
             
-    #         imgs,labels = sess.run(next_element)
-    #         # test_image = (imgs[0]* 255).astype('uint8')
-    #         # test_image = cv2.cvtColor(test_image, cv2.COLOR_RGB2BGR)
-    #         # cv2.imshow('img',test_image)
-    #         # cv2.waitKey(0)
-    #         # cv2.destroyAllWindows()
+            imgs,labels = sess.run(next_element)
+            test_image = (imgs[0]* 255).astype('uint8')
+            test_image = cv2.cvtColor(test_image, cv2.COLOR_RGB2BGR)
+            cv2.imshow('img',test_image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
             
-    #     except tf.errors.OutOfRangeError:
-    #         break
+        except tf.errors.OutOfRangeError:
+            break

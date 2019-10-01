@@ -279,8 +279,6 @@ $P_{r}(Classes|Object)*P_{r}(Object)*IOU^{true}_{predict} = P_{classes} * IOU^{t
 
 到这里为止YOLOv1重要的地方就讲解完毕了,论文其他地方就在在说YOLO厉害的地方以及和其他模型评比的过程,这里就不再阐述了.
 
-
-
 **Reference**
 
 [1] [You Only Look Once: Unified, Real-Time Object Detection](https://arxiv.org/pdf/1506.02640.pdf)
