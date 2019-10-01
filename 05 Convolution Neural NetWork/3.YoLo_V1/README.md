@@ -1,14 +1,3 @@
-<head>
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [['$','$']]
-            }
-        });
-    </script>
-</head>
 <figure class="third">
     <img src="photos/heyra.png" width="50" heigth="50"/>
 </figure>
@@ -22,6 +11,8 @@
 (1) 我不会根据论文的思路讲解YOLOV1,因为论文写的太简单了,以至于在实施YOLO的时候会出现许多问题,我这里只讲解我在实施的时候遇到的一些问题.
 
 (2) 如没有特殊提醒,下面论述的YOLO指的是YOLOv1.
+
+(3) 由于GIthub不支持在线解析LaTeX,所以你可能需要按照以下方法[安装Chrome插件](https://blog.csdn.net/u014568072/article/details/88872404)或者Download到本地.
 
 ## 1. 前言
 
@@ -55,10 +46,10 @@ YOLO不再像之前一样将其分解为分类和回归两个部分而是只看�
 
 那么接下来我们来看看YOLO是如何训练的,实际上作者将该网络的前20个卷积层使用ImageNet进行训练,需要注意的是,在使用ImageNet训练的时候,网络的输入是$224\times 224\times 3$大小.在获得了这20个卷积层的最优参数后为了保证细粒度的视觉信息,作者将$224\times 224\times 3$的输入更改为$448\times 448\times 3$,然后借鉴前人的思想:"预训练网络中增加卷积层和连接层可以提高性能"所以作者就再加了4个卷积层和2个全连接层.另外作者在论文中说明除了最后一层,其他层全部采用以下激活函数:
 
-$\phi(x) = \left\{\begin{matrix}
+$\phi(x) = \left\{{\begin{matrix}
 x &if \ x>0 \\ 
 0.1x & otherwise  
-\end{matrix}\right.$
+\end{matrix}}\right.$
 
 为了避免模型过拟合,作者在第一个全连接层使用$rate=0.5$的$dropout$.还有使用高达$20\%$的数据增广,其他的训练信息在这里就不多阐述了,因为现在已经有了更加优秀的Optimizer和其他的参数设置.如果你想源生按照论文去训练你可以自己看论文,已经写的很详细了.
 
@@ -284,7 +275,7 @@ $P_{r}(Classes|Object)*P_{r}(Object)*IOU^{true}_{predict} = P_{classes} * IOU^{t
 	</tbody>
 </table>
 
-到这里为止YOLOv1重要的地方就讲解完毕了,论文其他地方就在再说YOLO厉害的地方以及和其他模型评比的过程,这里就不再阐述了.
+到这里为止YOLOv1重要的地方就讲解完毕了,论文其他地方就在在说YOLO厉害的地方以及和其他模型评比的过程,这里就不再阐述了.
 
 
 
