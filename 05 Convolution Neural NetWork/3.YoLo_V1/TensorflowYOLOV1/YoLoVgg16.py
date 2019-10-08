@@ -4,46 +4,30 @@ import tensorflow as tf
 
 from Loss import _losses
 from GetDataInfo import FilesLoader, DataLoad
-from Utels import _get_response_obj,_Pre_MAP,_loop
+from Utels import _get_response_obj
+from Utels import _get_confidence
+from Utels import _get_TP_FPs
+from Utels import _get_precision_recall
+from Utels import _get_mAP
 
 class YoLoVgg16:
     def __init__(self,VOC_dir,batch_size):
         self.VOC_dir = VOC_dir
         self.batch_size = batch_size
         self.resize_image = 448
+        self.map_iou_thresh = 0.3
         self.var_list = []
         self.sess = tf.Session()
         self.w_init = tf.initializers.glorot_normal()
         self.b_init = tf.initializers.zeros()
         self.vgg_model = tf.keras.applications.vgg16.VGG16(include_top=False, weights='imagenet')
 
-    def _MAP(self,feed_dict):
-        Sort_TP_FP, Sture_label= self.sess.run([self.Sort_TP_FP,self.Sture_label],feed_dict=feed_dict)
-        # 计算precision,recall
-        Acc_TP, Acc_FP = 0, 0
-        # 由于TF的None存在,预编译不过,所以这里使用numpy计算.
-        num = np.where(Sture_label[:,:,0]>0)[0].shape[0]
-        classes_num = np.where(Sture_label[:,:,5:20] == 1)[0].shape[0]
-        precisions = []
-        recalls = []
-        for S in Sort_TP_FP:
-            precision,recall,Acc_TP,Acc_FP = _loop(S, Acc_TP, Acc_FP,num)
-            precisions.append(precision)
-            recalls.append(recall)
-        # 使用 “所有点插值法”,不严格按照recalls的变化计算.
-        init_value = 0
-        Area = 0
-        index = 0
-        for i in range(len(recalls)):
-            r = recalls[i]
-            if r - init_value > 0.001:
-                max_precision = np.max(precisions[index:i+1])
-                Area += (r - init_value) * max_precision
-                init_value = r
-                index = i
-        mAP_value = Area / classes_num
-        return mAP_value
-    
+    def _cal_mAP(self, feed_dict):
+        TP_FP, GT_sum = self.sess.run([self.TP_FP, self.GT_sum], feed_dict=feed_dict)
+        precisions, recalls = _get_precision_recall(TP_FP, GT_sum)
+        mAP = _get_mAP(precisions, recalls)
+        return mAP
+
     def _leak_relu(self, data):
         data = tf.nn.leaky_relu(data, 0.1)
         return data
@@ -81,7 +65,7 @@ class YoLoVgg16:
         return data
     
     def _load_data_set(self):
-        files_loader = FilesLoader(VOC_dir)
+        files_loader = FilesLoader(self.VOC_dir)
         sample_train, sample_val = files_loader.get_datas()
         data_load = DataLoad(self.sess, self.batch_size, self.resize_image)
         return data_load,sample_train,sample_val
@@ -103,7 +87,8 @@ class YoLoVgg16:
                     self.sess.run(self.Optimizer,feed_dict=feed_dict)
                 loss = self.sess.run(self.cost, feed_dict=feed_dict)
                 # 计算MAP
-                mean_map += self._MAP(feed_dict)
+                mAP = self._cal_mAP(feed_dict)
+                mean_map += mAP
                 mean_loss += loss
             except tf.errors.OutOfRangeError:
                 mean_loss /= count
@@ -116,7 +101,8 @@ class YoLoVgg16:
         self.learning_rate = tf.placeholder(tf.float32)
         self.out = self._net(self.datas)
         self.response_pre,self.new_labels = _get_response_obj(self.out, self.targets)
-        self.Sort_TP_FP,self.Sture_label = _Pre_MAP(self.response_pre,self.new_labels,iou_thresh=0.3)
+        self.C_predict = _get_confidence(self.response_pre)
+        self.TP_FP, self.GT_sum = _get_TP_FPs(self.C_predict, self.targets, self.map_iou_thresh)
         self.cost = _losses(self.response_pre, self.new_labels)
         self.Optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.cost, var_list=self.var_list)
 

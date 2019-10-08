@@ -100,51 +100,80 @@ def _NMS(bboxes, confidence, iou_thresh, max_out_put=10):
     select_indeces = tf.image.non_max_suppression(bboxes, confidence, max_out_put, iou_thresh)
     return select_indeces
 
-def _loop(S, Acc_TP, Acc_FP,num):
-    """循环TP与FP"""
-    _,value = S
-    if value == 1.:
-        Acc_TP += 1.
-    else:
-        Acc_FP += 1.
-    precision = Acc_TP / (Acc_TP + Acc_FP)
-    recall = Acc_TP / num
-
-    return precision,recall,Acc_TP,Acc_FP
-
-def _Pre_MAP(response_pre, ture_label_, iou_thresh=0.3):
+def _get_confidence(predict):
     """
-    [c,x,y,w,h,....]
-    out: [bs, 7, 7, 25]
-    true_label: [bs, 7, 7 25]
-    计算mAP
+    predict:[bs, 7, 7, 25]
     """
-    response_pre = tf.reshape(response_pre, (-1, 7 * 7, 25))
-    ture_label_ = tf.reshape(ture_label_, (-1, 7 * 7, 25))
-    response_cxywh = response_pre[:,:,0:5]
-    ture_label_cxywh = ture_label_[:,:,0:5]
-    iou = _cal_IOU(response_cxywh, ture_label_cxywh)
-    # 获取iou大于阈值的,也就是TP部分
-    where_TP = tf.where(tf.greater_equal(iou, iou_thresh))
-    r_pre_TP = tf.gather_nd(response_pre[:,:,0], where_TP)
-    r_pre_TP = tf.expand_dims(r_pre_TP, axis=1)
-    one_TP = tf.ones_like(r_pre_TP)
-    TP = tf.concat([r_pre_TP, one_TP], axis=1)
-    # 获取iou小于阈值的,也就FP部分
-    where_FP = tf.where(tf.less(iou, iou_thresh))
-    r_pre_FP = tf.gather_nd(response_pre[:,:,0], where_FP)
-    r_pre_FP = tf.expand_dims(r_pre_FP, axis=1)
-    zero_FP = tf.zeros_like(r_pre_FP)
-    FP = tf.concat([r_pre_FP, zero_FP], axis=1)
+    classes_cfd = tf.multiply(tf.expand_dims(predict[:,:,:,0], axis=-1), predict[:,:,:,5:])
+    max_classes = tf.expand_dims(tf.reduce_max(classes_cfd[:,:,:,5:], axis=-1), axis=-1)
+    C_predict = tf.concat([max_classes, predict[:,:,:,1:5]],axis=-1)
+    return C_predict
+
+def _get_precision_recall(tp_fp, gt_num):
+    """
+    获取precision 和 recall
+    """
+    precisions, recalls = [], []
+    tps, fps = 0, 0
+    for value in tp_fp:
+        if value[-1] == 1:
+            tps += 1
+        else:
+            fps += 1
+        precision = tps / (tps + fps)
+        recall = tps / gt_num
+        precisions.append(precision)
+        recalls.append(recall)
+    return precisions, recalls
+
+def _get_mAP(precisions, recalls):
+    # 获取recall变化的位置
+    N = len(recalls) - 1
+    indexces = []
+    n = 0
+    for i in range(N):
+        if recalls[i] != recalls[i + 1]:
+            indexces.append((n, i + 1))
+            n = i + 1
+    indexces.append((n, N))
+    Areas = 0
+    for start, end in indexces:
+        max_precision = np.max(precisions[start:end])
+        if start == 0:
+            sub_recall = recalls[end] - recalls[0]
+        else:
+            sub_recall = recalls[end] - recalls[start - 1]
+        Areas += max_precision * sub_recall
+    mAP = Areas / len(indexces)
+    return mAP
+
+def _get_TP_FPs(predict, labels, iou_thresh):
+    """
+    predict:[bs, 7, 7, 5]
+    由于标签的特殊性,我们无需理会
+    "如果一个GT对应了多个满足IOU阈值的BBOX,我们仅选取置信度最高的BBOX作为该GT的TP".
+    因为标签只有目标网格会有参数值.
+    """
+    labels = labels[:,:,:,:5]
+    predict = tf.reshape(predict, (-1, 7 * 7, 5))
+    labels = tf.reshape(labels, (-1, 7 * 7, 5))
+    IOU = _cal_IOU(labels, predict)
+    # 计算TP和FP,TP为1,FP为0
+    where_TP = tf.where(IOU > iou_thresh)
+    TP = tf.gather_nd(predict, where_TP)
+    _TP = tf.ones_like(TP)[:,0]
+    TP = tf.concat([TP, tf.expand_dims(_TP, axis=-1)], axis=-1)
+    where_FP = tf.where(IOU <= iou_thresh)
+    FP = tf.gather_nd(predict, where_FP)
+    _FP = tf.zeros_like(FP)[:,0]
+    FP = tf.concat([FP, tf.expand_dims(_FP, axis=-1)], axis=-1)
     TP_FP = tf.concat([TP,FP], axis=0)
-    # 按照置信度排序(降序)
-    Sort_TP_FP = tf.sort(TP_FP, axis=0, direction='DESCENDING')
-    return Sort_TP_FP,ture_label_
-
-
-
-
-
+    # 按照置信度进行排序
+    TP_FP = tf.sort(TP_FP, axis=0, direction='DESCENDING')
+    # 计算总共的GT
+    labels = tf.reshape(labels, (-1, 5))[:,0]
+    GT_sum = tf.reduce_sum(labels)
+    return TP_FP, GT_sum
 
 
 if __name__ == "__main__":
